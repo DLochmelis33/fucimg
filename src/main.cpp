@@ -1,4 +1,4 @@
-#include "bmp.hpp"
+#include "BmpImg.hpp"
 #include "th.hpp"
 
 #include <bits/stdc++.h>
@@ -402,11 +402,6 @@ void polar_addCoord(BmpImg& img, double dRad, double dZen, double dAzi) {
             Pixel& p = img[yc][xc];
             auto [rad, zen, azi] = toPolar(p.R, p.G, p.B);
             auto [x, y, z] = fromPolar(rad + dRad, zen + dZen, azi + dAzi);
-            if (xc == yc && xc % 25 == 0) {
-                cout << "rgb: " << (int)p.R << ' ' << (int)p.G << ' ' << (int)p.B << '\n';
-                cout << "rza: " << rad << ' ' << zen << ' ' << azi << '\n';
-                cout << "xyz: " << x << ' ' << y << ' ' << z << '\n';
-            }
             p.R = x;
             p.G = y;
             p.B = z;
@@ -420,11 +415,6 @@ void polar_mulCoord(BmpImg& img, double dRad, double dZen, double dAzi) {
             Pixel& p = img[yc][xc];
             auto [rad, zen, azi] = toPolar(p.R, p.G, p.B);
             auto [x, y, z] = fromPolar(rad * dRad, zen * dZen, azi * dAzi);
-            if (xc == yc && xc % 25 == 0) {
-                cout << "rgb: " << (int)p.R << ' ' << (int)p.G << ' ' << (int)p.B << '\n';
-                cout << "rza: " << rad << ' ' << zen << ' ' << azi << '\n';
-                cout << "xyz: " << x << ' ' << y << ' ' << z << '\n';
-            }
             p.R = x;
             p.G = y;
             p.B = z;
