@@ -15,7 +15,7 @@ include_directories(include)
 include_directories(hw01)
 
 add_library(HwBmp hw01/bmp.c)
-add_executable(${PROJECT_NAME} ${SOURCES} hw01/bmp.c)
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 # link_directories(hw01)
 target_link_libraries(${PROJECT_NAME} HwBmp)
