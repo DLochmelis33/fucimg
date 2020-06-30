@@ -1,6 +1,7 @@
 #include "bdfs.hpp"
+#include "offSeq.hpp"
 
-void dfs_random_walk_impl(BmpImg& img, const OffSeq& offSeq, vvbool& been, int x, int y, Pixel* px,
+void dfs_random_walk_impl(BmpImg& img, OffSeq offSeq, vvbool& been, int x, int y, Pixel* px,
                           double threshold) {
     if (been[y][x])
         return;
@@ -24,12 +25,12 @@ void dfs_random_walk_impl(BmpImg& img, const OffSeq& offSeq, vvbool& been, int x
     }
 }
 
-void dfs_random_walk(BmpImg& img, OffSeq offSeq, double threshold, int start_x, int start_y) {
+void dfs_random_walk(BmpImg& img, OffSeq offSeq, double threshold) {
     vvbool been = vvbool(img.height, vector<bool>(img.width, false));
     for (uint y = 0; y < img.height; y++)
         for (uint x = 0; x < img.width; x++)
             if (!been[y][x])
-                dfs_random_walk_impl(img, offSeq, been, start_x, start_y, nullptr, threshold);
+                dfs_random_walk_impl(img, offSeq, been, x, y, nullptr, threshold);
 }
 
 void bfs_impl(BmpImg& img, const OffSeq& offSeq, double threshold, vvbool& been, int x, int y) {
@@ -56,7 +57,7 @@ void bfs_impl(BmpImg& img, const OffSeq& offSeq, double threshold, vvbool& been,
     }
 }
 
-void bfs(BmpImg& img, OffSeq offSeq, double threshold, int start_x, int start_y) {
+void bfs(BmpImg& img, OffSeq offSeq, double threshold) {
     vvbool been(img.height, vector<bool>(img.width, false));
     for (uint y = 0; y < img.height; y++) {
         for (uint x = 0; x < img.width; x++) {

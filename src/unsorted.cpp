@@ -1,4 +1,5 @@
 #include "unsorted.hpp"
+#include "offSeq.hpp"
 
 void zakaz1(BmpImg& img) {
     for (uint y = 0; y < img.height; y++) {
@@ -40,7 +41,7 @@ void zakaz2(BmpImg& img) {
 
 void bounds_avgsigm(BmpImg& img, uint TH, int n) {
     // Sigmoid sigm({THRESHOLD});
-    vector<pair<int, int>> offset = genOffsetSeqSquareN(n);
+    vector<pair<int, int>> offset = osSquare(n, false);
 
     vector<vector<Pixel>> new_pixels = img.pixels;
     for (uint y = 0; y < img.height; y++) {

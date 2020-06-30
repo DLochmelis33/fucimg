@@ -7,7 +7,8 @@ OffSeq osCircle(double rad, bool outline, double width) {
             if (xoffset == 0 && yoffset == 0)
                 continue;
             double distance = dist({xoffset, yoffset}, {0, 0});
-            if ((outline && (abs(distance - rad) < width)) || (!outline && (distance < rad + width)))
+            if ((outline && (abs(distance - rad) < width)) ||
+                (!outline && (distance < rad + width)))
                 res.push_back({xoffset, yoffset});
         }
     }
@@ -32,7 +33,7 @@ OffSeq osSquare(int sqrad, bool outline) { // sqrad = side of square / 2
 OffSeq osGaussian(int count, double sigma) {
     std::random_device rd{};
     std::mt19937 gen{rd()};
-    std::normal_distribution dist_distribution{0, 2};
+    std::normal_distribution dist_distribution{0.0, sigma};
     std::uniform_real_distribution angle_distribution{0.0, 2 * M_PI}; // 1 * PI is also fine
 
     OffSeq res;
@@ -45,3 +46,5 @@ OffSeq osGaussian(int count, double sigma) {
     }
     return res;
 }
+
+OffSeq osAdjacent() { return {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; }

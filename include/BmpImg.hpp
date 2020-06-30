@@ -11,10 +11,7 @@ struct BmpImg {
     struct Pixel {
         unsigned char B, G, R;
 
-        Pixel(unsigned char b = 0, unsigned char g = 0, unsigned char r = 0)
-                : B{b}
-                , G{g}
-                , R{r} {}
+        Pixel(unsigned char b = 0, unsigned char g = 0, unsigned char r = 0) : B{b}, G{g}, R{r} {}
 
         Pixel& operator=(unsigned char val) {
             B = G = R = val;
@@ -45,10 +42,11 @@ struct BmpImg {
             return {static_cast<unsigned char>(B / x), static_cast<unsigned char>(G / x),
                     static_cast<unsigned char>(R / x)};
         }
+
+        int sumSq() const { return B * B + G * G + R * R; }
     };
 
-    BmpImg(const std::string& file)
-            : filename(file) {
+    BmpImg(const std::string& file) : filename(file) {
         reset_bmp_image(&image);
         load_bmp(filename.c_str(), &image);
         height = get_raster_height(image.header);
