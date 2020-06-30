@@ -1,15 +1,16 @@
 #include "aliasing.hpp"
+#include "offSeq.hpp"
 
 void avg_4adjM(BmpImg& img) {
     vector<vector<Pixel>> newPixels = img.pixels;
-    vector<pair<int, int>> offSeq = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    vector<pair<int, int>> OffSeq = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
     for (uint y = 0; y < img.height; y++) {
         for (uint x = 0; x < img.width; x++) {
             int sumB = 0;
             int sumG = 0;
             int sumR = 0;
             double cnt = 0;
-            for (auto [xoffset, yoffset] : offSeq) {
+            for (auto [xoffset, yoffset] : OffSeq) {
                 int curX = x + xoffset;
                 int curY = y + yoffset;
                 if (inBounds(curX, curY, img.width, img.height)) {
@@ -31,7 +32,7 @@ void avg_4adjM(BmpImg& img) {
 vector<vector<Pixel>> avg_adjK(vector<vector<Pixel>> pixels, int height,
                                int width, int k) {
     vector<vector<Pixel>> newPixels = pixels;
-    vector<pair<int, int>> offSeq = genOffsetSeqSquareN(k);
+    vector<pair<int, int>> OffSeq = genOffsetSeqSquareN(k);
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             auto [B, G, R] = pixels[y][x];
@@ -39,7 +40,7 @@ vector<vector<Pixel>> avg_adjK(vector<vector<Pixel>> pixels, int height,
             int sumG = G;
             int sumR = R;
             double cnt = 1;
-            for (auto [xoffset, yoffset] : offSeq) {
+            for (auto [xoffset, yoffset] : OffSeq) {
                 int curX = x + xoffset;
                 int curY = y + yoffset;
                 if (inBounds(curX, curY, width, height)) {
@@ -86,11 +87,11 @@ void ssaa4x(BmpImg& img) {
 
 void avg_ifth(BmpImg& img, int TH, int k) {
     vector<vector<Pixel>> newPixels = img.pixels;
-    vector<pair<int, int>> offSeq = genOffsetSeqSquareN(k);
+    vector<pair<int, int>> OffSeq = genOffsetSeqSquareN(k);
     for (uint y = 0; y < img.height; y++) {
         for (uint x = 0; x < img.width; x++) {
             vector<Pixel> adj;
-            for (auto [xoffset, yoffset] : offSeq) {
+            for (auto [xoffset, yoffset] : OffSeq) {
                 int curX = x + xoffset;
                 int curY = y + yoffset;
                 if (inBounds(curX, curY, img.width, img.height))

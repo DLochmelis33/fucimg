@@ -1,10 +1,5 @@
 #pragma once
-#include "BmpImg.hpp"
 #include "common.hpp"
-#include <algorithm>
-#include <math.h>
-#include <vector>
-#include <tuple>
 
 using namespace std;
 using Pixel = BmpImg::Pixel;

@@ -18,7 +18,7 @@ double VAR3 = 0; // M_PI * 2 / 4;
 
 double VAR4 = 1;
 double VAR5 = 1;
-double VAR6 = -1;
+double VAR6 = 1;
 
 double VAR7 = 0;
 double VAR8 = 0;

@@ -1,14 +1,5 @@
 #pragma once
-#include "BmpImg.hpp"
 #include "common.hpp"
-#include <math.h>
-#include <vector>
-
-using namespace std;
-using Pixel = BmpImg::Pixel;
-using uint = unsigned int;
-
-using vvbool = vector<vector<bool>>;
 
 void avg_4adjM(BmpImg& img);
 

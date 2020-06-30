@@ -1,13 +1,13 @@
 #pragma once
 #include "BmpImg.hpp"
-#include <math.h>
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
+
 using Pixel = BmpImg::Pixel;
 using uint = unsigned int;
-
 using vvbool = vector<vector<bool>>;
+using vvpix = vector<vector<Pixel>>;
 
 inline double colorDist(const Pixel& p1, const Pixel& p2) {
     return (p1.B - p2.B) * (p1.B - p2.B) + (p1.G - p2.G) * (p1.G - p2.G) +
@@ -23,48 +23,17 @@ inline bool inBounds(int x, int y, int w, int h) {
     return (x >= 0) && (x < w) && (y >= 0) && (y < h);
 }
 
-inline vector<pair<int, int>> genOffsetSeqStepK(int k) { // k - circle radius
-    // outer circle shape
-    vector<pair<int, int>> res;
-    double eps = 0.5;
-    for (int xoffset = -k; xoffset <= k; xoffset++) {
-        for (int yoffset = -k; yoffset <= k; yoffset++) {
-            if (xoffset == 0 && yoffset == 0)
-                continue;
-            if (dist({xoffset, yoffset}, {0, 0}) - k * k < eps) {
-                res.push_back({xoffset, yoffset});
-            }
-        }
-    }
-    return res;
-}
-
-inline vector<pair<int, int>> genOffsetSeqSquareN(int n) { // n - square side
-    // filled square shape
-    assert(n % 2 == 1);
-    int k = n / 2;
-    vector<pair<int, int>> res;
-    for (int xoffset = -k; xoffset <= k; xoffset++) {
-        for (int yoffset = -k; yoffset <= k; yoffset++) {
-            if (xoffset == 0 && yoffset == 0)
-                continue;
-            res.push_back({xoffset, yoffset});
-        }
-    }
-    return res;
-}
-
-inline Pixel averagePixel(vector<Pixel> pixels) {
+inline Pixel averagePixel(const vector<Pixel>& pixels) {
     int n = pixels.size();
-    int sumB = 0;
-    int sumG = 0;
-    int sumR = 0;
+    double sumB = 0;
+    double sumG = 0;
+    double sumR = 0;
     for (const Pixel& p : pixels) {
         sumB += p.B;
         sumG += p.G;
         sumR += p.R;
     }
-    return Pixel(sumB / n, sumG / n, sumR / n);
+    return Pixel(round(sumB / n), round(sumG / n), round(sumR / n));
 }
 
 struct Sigmoid {
@@ -77,17 +46,31 @@ struct Sigmoid {
     }
 };
 
-inline void merge(BmpImg& img1, BmpImg& img2, BmpImg& img3) {
-    assert(img1.height == img2.height && img2.height == img3.height);
-    assert(img1.width == img2.width && img2.width == img3.width);
+inline void merge(
+    vvpix& vec1, vvpix& vec2, vvpix& vec3,
+    std::function<Pixel(const Pixel&, const Pixel&)> mergeRule =
+        [](const Pixel& p1, const Pixel& p2) {
+            return averagePixel({p1, p2});
+        }) {
 
-    for (uint y = 0; y < img1.height; y++) {
-        for (uint x = 0; x < img1.width; x++) {
-            // if (rand() % 2)
-            //     img3[y][x] = img1[y][x];
-            // else
-            //     img3[y][x] = img2[y][x];
-            img3[y][x] = averagePixel({img1[y][x], img2[y][x]});
+    uint vec1height = vec1.size();
+    assert(vec1height > 0);
+    uint vec1width = vec1[0].size();
+
+    uint vec2height = vec2.size();
+    assert(vec2height > 0);
+    uint vec2width = vec2[0].size();
+
+    uint vec3height = vec3.size();
+    assert(vec3height > 0);
+    uint vec3width = vec3[0].size();
+
+    assert(vec1height == vec2height && vec2height == vec3height);
+    assert(vec1width == vec2width && vec2width == vec3width);
+
+    for (uint y = 0; y < vec1height; y++) {
+        for (uint x = 0; x < vec1width; x++) {
+            vec3[y][x] = mergeRule(vec1[y][x], vec2[y][x]);
         }
     }
 }
