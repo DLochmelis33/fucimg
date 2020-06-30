@@ -29,33 +29,22 @@ int main(int argc, char** argv) {
 
     // * interesting stuff here
 
-    // vvbool vec(img.height, vector<bool>(img.width, false));
-    // auto offsetSeq = genOffsetSeqStepK(20);
-    // dfs_rw_stepK(img, vec, offsetSeq, 0, 0);
     // mix_2kp1(img, 3);
     // dfs_random_walk(img, vec, 0, 0);
     // bfs(img);
     // bounds_avgsigm(img, TH1, K1);
 
-    // avg_4adjM(img);
-    // avg_adjK(img, 3);
     // ssaa4x(img);
 
-    // -------
-
-    polar_addCoord(img, VAR1, VAR2, VAR3);
-    polar_mulCoord(img, VAR4, VAR5, VAR6);
+    // polar_addCoord(img, VAR1, VAR2, VAR3);
+    // polar_mulCoord(img, VAR4, VAR5, VAR6);
 
     // -------
 
-    // zakaz2(img);
+    dfs_random_walk(img, osGaussian(K1, VAR1), TH1);
+    median_filter(img, VAR2);
 
-    // BmpImg img3(argv[1]);
-    // BmpImg img1(argv[1]);
-    // BmpImg img2(argv[1]);
-
-    // zakaz1(img1);
-    // zakaz2(img2);
+    // -------
 
     // merge(img1, img2, img3);
     // avg_ifth(img3, TH2, K2);
