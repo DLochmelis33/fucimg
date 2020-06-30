@@ -14,10 +14,10 @@ tuple<double, double, double> fromPolar(double rad, double zen, double azi) {
     return {x, y, z};
 }
 
-void polar_addCoord(BmpImg& img, double dRad, double dZen, double dAzi) {
-    for (uint yc = 0; yc < img.height; yc++) {
-        for (uint xc = 0; xc < img.width; xc++) {
-            Pixel& p = img[yc][xc];
+void polar_addCoord(vvpix& pixels, double dRad, double dZen, double dAzi) {
+    for (uint yc = 0; yc < pixels.height; yc++) {
+        for (uint xc = 0; xc < pixels.width; xc++) {
+            Pixel& p = pixels[yc][xc];
             auto [rad, zen, azi] = toPolar(p.R, p.G, p.B);
             auto [x, y, z] = fromPolar(rad + dRad, zen + dZen, azi + dAzi);
             p.R = x;
@@ -27,10 +27,10 @@ void polar_addCoord(BmpImg& img, double dRad, double dZen, double dAzi) {
     }
 }
 
-void polar_mulCoord(BmpImg& img, double dRad, double dZen, double dAzi) {
-    for (uint yc = 0; yc < img.height; yc++) {
-        for (uint xc = 0; xc < img.width; xc++) {
-            Pixel& p = img[yc][xc];
+void polar_mulCoord(vvpix& pixels, double dRad, double dZen, double dAzi) {
+    for (uint yc = 0; yc < pixels.height; yc++) {
+        for (uint xc = 0; xc < pixels.width; xc++) {
+            Pixel& p = pixels[yc][xc];
             auto [rad, zen, azi] = toPolar(p.R, p.G, p.B);
             auto [x, y, z] = fromPolar(rad * dRad, zen * dZen, azi * dAzi);
             p.R = x;

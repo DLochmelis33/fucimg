@@ -2,6 +2,6 @@
 #include "common.hpp"
 #include "offSeq.hpp"
 
-void dfs_random_walk(BmpImg &img, OffSeq offSeq, double threshold);
+void dfs_random_walk(vvpix& pixels, OffSeq offSeq, double threshold);
 
-void bfs(BmpImg &img, OffSeq offSeq, double threshold);
+void bfs(vvpix& pixels, OffSeq offSeq, double threshold);

@@ -2,19 +2,19 @@
 #include "BmpImg.hpp"
 #include <bits/stdc++.h>
 
-using namespace std;
-
+using std::vector;
+using std::pair;
 using Pixel = BmpImg::Pixel;
 using uint = unsigned int;
 using vvbool = vector<vector<bool>>;
-using vvpix = vector<vector<Pixel>>;
+using vvpix = BmpImg::vvpix;
 
 inline double colorDist(const Pixel& p1, const Pixel& p2) {
     return (p1.B - p2.B) * (p1.B - p2.B) + (p1.G - p2.G) * (p1.G - p2.G) +
            (p1.R - p2.R) * (p1.R - p2.R);
 }
 
-inline double dist(pair<int, int> p1, pair<int, int> p2) {
+inline double dist(std::pair<int, int> p1, std::pair<int, int> p2) {
     return (p1.first - p2.first) * (p1.first - p2.first) +
            (p1.second - p2.second) * (p1.second - p2.second);
 }
@@ -33,7 +33,7 @@ inline Pixel averagePixel(const vector<Pixel>& pixels) {
         sumG += p.G;
         sumR += p.R;
     }
-    return Pixel(round(sumB / n), round(sumG / n), round(sumR / n));
+    return Pixel(std::round(sumB / n), std::round(sumG / n), std::round(sumR / n));
 }
 
 struct Sigmoid {
@@ -42,7 +42,7 @@ struct Sigmoid {
     Sigmoid(unsigned int limit) : limit_(limit){};
     Sigmoid(unsigned int limit, double base) : limit_(limit), base_(base){};
     double operator()(double x) const {
-        return 1.0 / (1 + pow(base_, -(x - limit_ / 2)));
+        return 1.0 / (1 + std::pow(base_, -(x - limit_ / 2)));
     }
 };
 
@@ -53,23 +53,11 @@ inline void merge(
             return averagePixel({p1, p2});
         }) {
 
-    uint vec1height = vec1.size();
-    assert(vec1height > 0);
-    uint vec1width = vec1[0].size();
+    assert(vec1.height == vec2.height && vec2.height == vec3.height);
+    assert(vec1.width == vec2.width && vec2.width == vec3.width);
 
-    uint vec2height = vec2.size();
-    assert(vec2height > 0);
-    uint vec2width = vec2[0].size();
-
-    uint vec3height = vec3.size();
-    assert(vec3height > 0);
-    uint vec3width = vec3[0].size();
-
-    assert(vec1height == vec2height && vec2height == vec3height);
-    assert(vec1width == vec2width && vec2width == vec3width);
-
-    for (uint y = 0; y < vec1height; y++) {
-        for (uint x = 0; x < vec1width; x++) {
+    for (uint y = 0; y < vec1.height; y++) {
+        for (uint x = 0; x < vec1.width; x++) {
             vec3[y][x] = mergeRule(vec1[y][x], vec2[y][x]);
         }
     }

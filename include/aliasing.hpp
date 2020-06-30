@@ -2,12 +2,12 @@
 #include "common.hpp"
 #include "offSeq.hpp"
 
-void avg_4adjM(BmpImg& img);
+void avg_4adjM(vvpix& img);
 
-void avg_os(BmpImg& img, OffSeq offSeq, int threshold = 0);
+void avg_os(vvpix& img, OffSeq offSeq, int threshold = 0);
 
-void ssaa4x(BmpImg& img);
+void ssaa4x(vvpix& img);
 
 void median_filter(
-    BmpImg& img, double rad, std::function<bool(const Pixel&, const Pixel&)> comparator =
+    vvpix& img, double rad, std::function<bool(const Pixel&, const Pixel&)> comparator =
                      [](const Pixel& p1, const Pixel& p2) { return p1.sumSq() < p2.sumSq(); });

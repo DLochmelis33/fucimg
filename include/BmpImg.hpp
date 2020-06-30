@@ -6,7 +6,8 @@
 #include <string>
 #include <vector>
 
-struct BmpImg {
+class BmpImg {
+    public:
 
     struct Pixel {
         unsigned char B, G, R;
@@ -46,12 +47,27 @@ struct BmpImg {
         int sumSq() const { return B * B + G * G + R * R; }
     };
 
+    class vvpix {
+      private:
+        std::vector<std::vector<Pixel>> pixels;
+
+      public:
+        uint height, width;
+        vvpix(const std::vector<std::vector<Pixel>>& pixels_) : pixels(pixels_) {
+            height = pixels.size();
+            assert(height > 0);
+            width = pixels[0].size();
+        }
+        vvpix() : pixels{}, height(), width() {}
+        std::vector<Pixel>& operator[](size_t y) { return pixels[y]; }
+    };
+
     BmpImg(const std::string& file) : filename(file) {
         reset_bmp_image(&image);
         load_bmp(filename.c_str(), &image);
         height = get_raster_height(image.header);
         width = get_raster_width(image.header);
-        pixels.resize(height, std::vector<Pixel>(width));
+        pixels = std::vector<std::vector<Pixel>>(height, std::vector<Pixel>(width));
         assert(BYTES_PER_PIXEL == 3);
         for (size_t y = 0; y < height; y++)
             for (size_t x = 0; x < width; x++)
@@ -59,8 +75,8 @@ struct BmpImg {
                                 image.pixels[y][3 * x + 2]};
     }
 
-    BmpImg(const BmpImg& other) = default;
-    BmpImg& operator=(const BmpImg& other) = default;
+    BmpImg(const BmpImg& other) = delete;
+    BmpImg& operator=(const BmpImg& other) = delete;
 
     std::vector<Pixel>& operator[](int y) { return pixels[y]; }
 
@@ -76,8 +92,12 @@ struct BmpImg {
         flush_bmp_image(&image);
     }
 
+    operator vvpix& () { return pixels; }
+
+private:
     BmpImage image;
-    std::vector<std::vector<Pixel>> pixels;
+public:
+    vvpix pixels;
     size_t height;
     size_t width;
     std::string filename;

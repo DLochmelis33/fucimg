@@ -4,7 +4,7 @@
 #include <math.h>
 
 unsigned int TH1 = 10000;
-unsigned int K1 = 7;
+unsigned int K1 = 1;
 
 unsigned int TH2 = 20000;
 unsigned int K2 = 5;
