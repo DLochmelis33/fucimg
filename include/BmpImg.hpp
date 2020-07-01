@@ -3,12 +3,12 @@
 #include "bmp.h"
 
 #include <cassert>
+#include <chrono>
 #include <string>
 #include <vector>
 
 class BmpImg {
-    public:
-
+  public:
     struct Pixel {
         unsigned char B, G, R;
 
@@ -60,6 +60,7 @@ class BmpImg {
         }
         vvpix() : pixels{}, height(), width() {}
         std::vector<Pixel>& operator[](size_t y) { return pixels[y]; }
+        const std::vector<Pixel>& operator[](size_t y) const { return pixels[y]; }
     };
 
     BmpImg(const std::string& file) : filename(file) {
@@ -88,15 +89,20 @@ class BmpImg {
                 image.pixels[y][3 * x + 1] = pixels[y][x].G;
                 image.pixels[y][3 * x + 2] = pixels[y][x].R;
             }
-        save_bmp(&image, ("MOD_" + filename).c_str());
+        save_bmp(&image, ("MOD_" +
+                          std::to_string(std::chrono::system_clock::to_time_t(
+                              std::chrono::high_resolution_clock::now())) +
+                          filename)
+                             .c_str());
         flush_bmp_image(&image);
     }
 
-    operator vvpix& () { return pixels; }
+    operator vvpix&() { return pixels; }
 
-private:
+  private:
     BmpImage image;
-public:
+
+  public:
     vvpix pixels;
     size_t height;
     size_t width;

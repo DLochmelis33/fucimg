@@ -30,8 +30,7 @@ void zakaz2(vvpix& pixels) {
     for (uint y = 0; y < pixels.height; y++) {
         for (uint x = 0; x < pixels.width; x++) {
             Pixel& p = pixels[y][x];
-            if (colorDist(p, {0, 0, 0}) <
-                colorDist({avgB, avgG, avgR}, {0, 0, 0}))
+            if (colorDist(p, {0, 0, 0}) < colorDist({avgB, avgG, avgR}, {0, 0, 0}))
                 p = 0;
             else
                 p = 255;
@@ -41,7 +40,7 @@ void zakaz2(vvpix& pixels) {
 
 void bounds_avgsigm(vvpix& pixels, uint TH, int n) {
     // Sigmoid sigm({THRESHOLD});
-    vector<pair<int, int>> offset = osSquare(n, false); 
+    vector<pair<int, int>> offset = osSquare(n, false);
 
     vvpix new_pixels = pixels;
     for (uint y = 0; y < pixels.height; y++) {
@@ -105,4 +104,87 @@ void mix_2kp1(vvpix& pixels, unsigned int k) { // i.e. mix_5 for k=2
             }
         }
     }
+}
+
+void color_k_means(vvpix& pixels, int k, double stopSensitivity, int stepsLimit) {
+    vvpix newPixels = pixels;
+
+    vector<Pixel> pxs;
+    for (uint y = 0; y < newPixels.height; y++)
+        for (uint x = 0; x < newPixels.width; x++)
+            pxs.push_back(newPixels[y][x]);
+
+    std::cout << "k-means started...\n";
+    auto kmeansStartTime = std::chrono::steady_clock::now();
+
+    // generate initial distribution
+    vector<Pixel> centers;
+    for (int i = 0; i < k; i++) {
+        uint x = rand() % pixels.width;
+        uint y = rand() % pixels.height;
+        centers.push_back(pixels[y][x]);
+    }
+    vector<vector<pair<int, int>>> clusters(k); // save pixel coords
+
+    auto updateClusters = [&]() {
+        for(vector<pair<int, int>> cluster : clusters)
+            cluster.clear();
+        for (uint y = 0; y < pixels.height; y++) {
+            for (uint x = 0; x < pixels.width; x++) {
+                uint closestColorCenterInd = 0;
+                double closestColorDist = colorDist(pixels[y][x], centers[0]);
+                for (int i = 1; i < k; i++) {
+                    double curColorDist = colorDist(pixels[y][x], centers[i]);
+                    if (curColorDist < closestColorDist) {
+                        closestColorDist = curColorDist;
+                        closestColorCenterInd = i;
+                    }
+                }
+                clusters[closestColorCenterInd].push_back({x, y});
+            }
+        }
+    };
+    updateClusters();
+    // iterations
+    for (int step = 0; step < stepsLimit; step++) { // avoid while(true)
+        // calculate new centers
+        vector<Pixel> newCenters(k);
+        bool anyChanges = false;
+        for (int i = 0; i < k; i++) {
+            vector<Pixel> curCluster;
+            for (auto [x, y] : clusters[i])
+                curCluster.push_back(pixels[y][x]);
+            Pixel newCenter = averagePixel(curCluster);
+            if (colorDist(newCenter, centers[i]) > stopSensitivity)
+                anyChanges = true;
+            newCenters[i] = newCenter;
+        }
+        if (!anyChanges)
+            break;
+        // update clusters with new centers
+        updateClusters();
+    }
+
+    auto kmeansEndTime = std::chrono::steady_clock::now();
+    std::cout
+        << "k-means ended in "
+        << std::chrono::duration<double, std::milli>(kmeansEndTime - kmeansStartTime).count() /
+               1000.0
+        << " seconds\n";
+
+    for (uint y = 0; y < newPixels.height; y++) {
+        for (uint x = 0; x < newPixels.width; x++) {
+            double closestColorDist = colorDist(pixels[y][x], centers[0]);
+            uint closestColorCenterInd = 0;
+            for(int i = 0; i < k; i++){
+                double curColorDist = colorDist(pixels[y][x], centers[i]);
+                if(curColorDist < closestColorDist){
+                    closestColorDist = curColorDist;
+                    closestColorCenterInd = i;
+                }
+            }
+            newPixels[y][x] = centers[closestColorCenterInd];
+        }
+    }
+    pixels = newPixels;
 }

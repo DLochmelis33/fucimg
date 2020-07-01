@@ -39,10 +39,15 @@ int main(int argc, char** argv) {
     // polar_addCoord(img, VAR1, VAR2, VAR3);
     // polar_mulCoord(img, VAR4, VAR5, VAR6);
 
+    // dfs_random_walk(img, osGaussian(K1, VAR1), TH1);
+    // median_filter(img, VAR2);
+
     // -------
 
-    dfs_random_walk(img, osGaussian(K1, VAR1), TH1);
+    srand(time(0));
+    color_k_means(img, K1, VAR1, TH1);
     median_filter(img, VAR2);
+    median_filter(img, VAR3);
 
     // -------
 
