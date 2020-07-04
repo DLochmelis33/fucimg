@@ -6,7 +6,7 @@ OffSeq osCircle(double rad, bool outline, double width) {
         for (int yoffset = -rad - width; yoffset <= rad + width; yoffset++) {
             if (xoffset == 0 && yoffset == 0)
                 continue;
-            double distance = dist({xoffset, yoffset}, {0, 0});
+            double distance = distSq({xoffset, yoffset}, {0, 0});
             if ((outline && (abs(distance - rad) < width)) ||
                 (!outline && (distance < rad + width)))
                 res.push_back({xoffset, yoffset});

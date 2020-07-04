@@ -14,7 +14,7 @@ inline double colorDist(const Pixel& p1, const Pixel& p2) {
            (p1.R - p2.R) * (p1.R - p2.R);
 }
 
-inline double dist(std::pair<int, int> p1, std::pair<int, int> p2) {
+inline double distSq(std::pair<int, int> p1, std::pair<int, int> p2) {
     return (p1.first - p2.first) * (p1.first - p2.first) +
            (p1.second - p2.second) * (p1.second - p2.second);
 }

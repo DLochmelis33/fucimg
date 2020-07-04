@@ -5,7 +5,7 @@ project(fucimg)
 set(CMAKE_CXX_COMPILER "g++")
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -O3 -DNDEBUG")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -O2 -g3 -fsanitize=address")
 
 file(GLOB SOURCES
     "src/*"

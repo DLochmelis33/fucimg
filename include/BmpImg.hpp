@@ -89,11 +89,17 @@ class BmpImg {
                 image.pixels[y][3 * x + 1] = pixels[y][x].G;
                 image.pixels[y][3 * x + 2] = pixels[y][x].R;
             }
-        save_bmp(&image, ("MOD_" +
-                          std::to_string(std::chrono::system_clock::to_time_t(
-                              std::chrono::high_resolution_clock::now())) +
-                          filename)
-                             .c_str());
+        std::string uid = "";
+        #ifdef UID_NAMES
+            uid = std::to_string(std::hash<std::string>{}(
+                std::to_string(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                                    std::chrono::high_resolution_clock::now().time_since_epoch())
+                                    .count())));
+            size_t uidLength = 7;
+            uid = uid.substr(uid.size() - uidLength, uidLength) + "_";
+        #endif
+
+        save_bmp(&image, ("MOD_" + uid + filename).c_str());
         flush_bmp_image(&image);
     }
 

@@ -3,7 +3,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-unsigned int TH1 = 30; // stepsLimit
+unsigned int TH1 = 1; // stepsLimit
 unsigned int K1 = 10;  // k
 
 unsigned int TH2 = 20000;
