@@ -48,3 +48,26 @@ OffSeq osGaussian(int count, double sigma) {
 }
 
 OffSeq osAdjacent() { return {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; }
+
+vector<Pixel> get_os_pixels(const vvpix& img, OffSeq offSeq, int x, int y) {
+    vector<Pixel> res;
+    for (auto [xoffset, yoffset] : offSeq) {
+        int curX = x + xoffset;
+        int curY = y + yoffset;
+        if (inBounds(curX, curY, img.width, img.height))
+            res.push_back(img[curY][curX]);
+    }
+    return res;
+}
+
+Pixel avg_os(const vvpix& pixels, OffSeq offSeq, int x, int y) {
+    return averagePixel(get_os_pixels(pixels, offSeq, x, y));
+}
+
+Pixel median_os(const vvpix& img, OffSeq offSeq, int x, int y) {
+    auto adj = get_os_pixels(img, offSeq, x, y);
+    uint ind = std::max((uint) 0, (uint) (adj.size() / 2 - 1));
+    nth_element(adj.begin(), adj.begin() + ind, adj.end(), 
+            [] (const Pixel& p1, const Pixel& p2) {return p1.sumSq() < p2.sumSq(); });
+    return adj[ind];
+}

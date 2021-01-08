@@ -49,25 +49,10 @@ int main(int argc, char** argv) {
     // srand(time(0));
     // color_k_means(img, K1, VAR1, TH1);
     // median_filter(img, VAR2);
-    // median_filter(img, VAR3);
-
-    // -------
-
-    zakaz2(img);
-    median_filter(img, VAR3);
-    vector<Point> points;
-    for (uint y = 0; y < img.height; y++) {
-        for (uint x = 0; x < img.width; x++) {
-            if (img[y][x].B == 0 && rand() % 10 == 0)
-                points.push_back({y, x});
-            img[y][x] = 255;
-        }
-    }
-    vector<Edge> segments = euclidean_mst(points);
-    for (Edge seg : segments) {
-        auto [p1, p2] = seg;
-        drawSegment(img, p1, p2, VAR4, {0, 0, 0});
-    }
+    
+    srand(K2);
+    circlify(img, K1, VAR1, VAR4, VAR5, K3);
+    median_filter(img, VAR2);
 
     // ssaa4x(img);
 

@@ -1,5 +1,7 @@
 #include "unsorted.hpp"
 #include "offSeq.hpp"
+#include "shapes.hpp"
+#include <random>
 
 void zakaz1(vvpix& pixels) {
     for (uint y = 0; y < pixels.height; y++) {
@@ -187,4 +189,38 @@ void color_k_means(vvpix& pixels, int k, double stopSensitivity, int stepsLimit)
         }
     }
     pixels = newPixels;
+}
+
+std::vector<Circle> generateCircles(int n, double lam, uint w, uint h, double radScale) {
+    std::mt19937 gen(rand());
+
+    std::exponential_distribution<double> d_rad(lam);
+    std::uniform_int_distribution<int> d_x(0, w), d_y(0, h);
+
+    std::vector<Circle> result;
+    for(int i = 0; i < n; ++i)
+        result.push_back({(d_rad(gen) * radScale), d_x(gen), d_y(gen)});
+
+    return result;
+}
+
+void circlify(vvpix& pixels, int n, double lam, double radScale, double minRad, uint shuffleCoef){
+    vvpix new_pixels = pixels;
+
+    vector<Circle> circles = generateCircles(n, lam, pixels.width, pixels.height, radScale);
+
+    std::sort(circles.begin(), circles.end(), 
+        [&](const Circle& c1, const Circle& c2) {
+            return c1.rad > c2.rad + (rand() % std::max((uint) 1, shuffleCoef));
+        });
+
+    for(auto [rad, xc, yc] : circles){
+        // std::cout << rad << ' ' << xc << ' ' << yc << std::endl;
+        if(rad < minRad)
+            continue;
+        Pixel p = median_os(pixels, osCircle(rad, false), xc, yc);
+        drawCircle(new_pixels, rad, xc, yc, p);
+    }
+
+    pixels = new_pixels;
 }
