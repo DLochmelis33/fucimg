@@ -10,6 +10,7 @@
 #include "polar.hpp"
 #include "shapes.hpp"
 #include "unsorted.hpp"
+#include "funcs.hpp"
 
 #include <bits/stdc++.h>
 #include <sys/resource.h>
@@ -50,11 +51,23 @@ int main(int argc, char** argv) {
     // color_k_means(img, K1, VAR1, TH1);
     // median_filter(img, VAR2);
     
-    srand(K2);
-    circlify(img, K1, VAR1, VAR4, VAR5, K3);
-    median_filter(img, VAR2);
+    // srand(K2);
+    // circlify(img, K1, VAR1, VAR4, VAR5, K3);
+    // median_filter(img, VAR2);
 
-    // ssaa4x(img);
+    auto fr = [](double rx, double ry) {
+        return rx - ry * std::exp(rx / 500 - 0.5);
+    };
+    auto fg = [] (double rx, double ry) {
+        return std::sin(rx / 500) * ry + rx * std::cos(ry / 300 * 2);
+    };
+    auto fb = [] (double rx, double ry) {
+        return std::pow(rx, 0.8) - std::pow(ry, 1.1);
+    };
+
+    apply_color_func(img, fr, fg, fb, VAR7, VAR8);
+
+    median_filter(img, VAR2);
 
     // -------
 

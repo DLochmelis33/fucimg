@@ -218,7 +218,7 @@ void circlify(vvpix& pixels, int n, double lam, double radScale, double minRad, 
         // std::cout << rad << ' ' << xc << ' ' << yc << std::endl;
         if(rad < minRad)
             continue;
-        Pixel p = median_os(pixels, osCircle(rad, false), xc, yc);
+        Pixel p = median_os(pixels, osCircle(rad, false), xc, yc); // or avg_os
         drawCircle(new_pixels, rad, xc, yc, p);
     }
 

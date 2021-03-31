@@ -1,7 +1,7 @@
 #include "common.hpp"
+#include <functional>
 
-void genRanTrig(uint complexity) {
-    
-}
+using colorfunc = std::function<double(double, double)>;
 
-void rantrigrad(vvpix& pixels, Pixel c1, Pixel c2, uint steps);
+void apply_color_func(vvpix& img, colorfunc fr, colorfunc fg, colorfunc fb, double wscale, double hscale);
+
